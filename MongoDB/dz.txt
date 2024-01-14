@@ -1,0 +1,81 @@
+Задача 1: Вывести имена пользователей не из France
+
+
+// Задача 1: Вывести имена пользователей не из France
+db.users.find({ country: { $ne: "France" } }, { _id: 0, name: 1 })
+
+// Задача 2: Добавить несколько реакций на треки
+Для добавления реакций предположим, что у нас есть коллекция reactions. Каждый документ в этой коллекции будет представлять реакцию на трек.
+
+db.reactions.insertOne({
+  userId: 1,
+  trackId: 101,
+  type: "Like"
+});
+
+db.reactions.insertOne({
+  userId: 2,
+  trackId: 102,
+  type: "Love"
+});
+
+db.reactions.insertOne({
+  userId: 3,
+  trackId: 103,
+  type: "Dislike"
+});
+
+// Задача 3: Вывести названия треков продолжительностью от 1 до 10 минут
+
+db.tracks.find({ duration: { $gte: 1, $lte: 10 } }, { _id: 0, name: 1 })
+
+// Задача 4: Вывести треки пользователя 4
+
+db.playlists.aggregate([
+  { $match: { "user.id": 4 } },
+  { $unwind: "$tracks" },
+  { $project: { _id: 0, track: "$tracks.name" } }
+])
+
+
+// Задача 5: Описание схемы БД в MongoDB
+
+users
+javascript
+Copy code
+{
+  id: 1,
+  name: "John",
+  country: "USA"
+}
+tracks
+javascript
+Copy code
+{
+  id: 101,
+  name: "Song 1",
+  duration: 5
+}
+reactions
+javascript
+Copy code
+{
+  userId: 1,
+  trackId: 101,
+  type: "Like"
+}
+playlists
+javascript
+Copy code
+{
+  id: 201,
+  name: "My Playlist 1",
+  user: {
+    id: 1,
+    name: "John"
+  },
+  tracks: [
+    { id: 101, name: "Song 1", duration: 5 },
+    { id: 102, name: "Song 2", duration: 3 }
+  ]
+}
